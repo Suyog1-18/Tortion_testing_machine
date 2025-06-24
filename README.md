@@ -33,5 +33,4 @@ To experimentally and analytically study the torsion of circular shafts and veri
 3. Implemented data analysis in Python.
 4. Plotted stress-strain curves and computed material constants.
 
-## 📁 Project Structure
 
