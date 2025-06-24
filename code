@@ -1,0 +1,44 @@
+// Define pins
+#include "HX711.h"
+const int PUL = 8; // Step pin
+const int DIR = 10; // Direction pin
+const int EN  = 11; // Enable pin (optional)
+const int DT = 7;
+const int SCKK= 6;
+
+HX711 scale;
+void setup() {
+  Serial.begin(9600);
+  pinMode(PUL, OUTPUT);
+  pinMode(DIR, OUTPUT);
+  pinMode(EN, OUTPUT);
+
+  digitalWrite(EN, LOW); // Enable the driver (active LOW)
+  digitalWrite(DIR, HIGH); // Set direction (HIGH or LOW)
+  
+ scale.begin(DT, SCKK);
+
+  Serial.println("Initializing scale...");
+  delay(2000);
+
+  if (!scale.is_ready()) {
+    Serial.println("HX711 not found.");
+    while (1)
+      ;
+  }
+
+  scale.set_scale(); 
+  scale.tare();      
+}
+long i=0;
+void loop() {
+  // Send one step pulse
+  digitalWrite(PUL, HIGH);
+  delayMicroseconds(5); // Pulse width (TB6600 min is ~2.2 µs)
+  digitalWrite(PUL, LOW);
+  delay(2000); // Step interval
+  Serial.println(scale.get_units());
+  i++;
+  if(i==60)delay(90000);
+  delay(200); // Optional delay between steps
+}
